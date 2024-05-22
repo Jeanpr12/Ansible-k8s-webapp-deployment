@@ -1,0 +1,6 @@
+---
+- name: Setup Kubernetes on AWS instances
+  hosts: aws
+  become: yes
+  roles:
+    - kubernetes
