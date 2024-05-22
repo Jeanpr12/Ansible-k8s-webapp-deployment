@@ -1,0 +1,46 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+
+- name: Download Google Cloud public signing key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add Kubernetes apt repository
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+
+- name: Update apt package index
+  apt:
+    update_cache: yes
+
+- name: Install Kubernetes
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+
+- name: Initialize Kubernetes cluster
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16
+  when: inventory_hostname == groups['aws'][0]
+
+- name: Set kubeconfig for the ubuntu user
+  command: >
+    mkdir -p /home/ubuntu/.kube &&
+    cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config &&
+    chown ubuntu:ubuntu /home/ubuntu/.kube/config
+  when: inventory_hostname == groups['aws'][0]
+
+- name: Install Flannel CNI
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  when: inventory_hostname == groups['aws'][0]
