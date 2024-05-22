@@ -296,4 +296,3 @@ data:
 
 
 
-Feel free to customize the README further based on any additional details or preferences you might have. This file provides a comprehensive guide for users and potential recruiters to understand and replicate your project.
