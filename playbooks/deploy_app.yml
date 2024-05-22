@@ -1,0 +1,6 @@
+---
+- name: Deploy web application using Kubernetes
+  hosts: aws
+  become: yes
+  roles:
+    - webapp
