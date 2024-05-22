@@ -1,0 +1,24 @@
+---
+- name: Create Kubernetes deployment file
+  template:
+    src: deployment.yml.j2
+    dest: /home/ubuntu/deployment.yml
+
+- name: Create Kubernetes service file
+  template:
+    src: service.yml.j2
+    dest: /home/ubuntu/service.yml
+
+- name: Create Kubernetes configmap file
+  template:
+    src: configmap.yml.j2
+    dest: /home/ubuntu/configmap.yml
+
+- name: Deploy application
+  command: kubectl apply -f /home/ubuntu/deployment.yml
+
+- name: Deploy service
+  command: kubectl apply -f /home/ubuntu/service.yml
+
+- name: Deploy configmap
+  command: kubectl apply -f /home/ubuntu/configmap.yml
